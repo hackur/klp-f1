@@ -121,7 +121,7 @@ export const HeroSection = () => {
               <span> Design is out now! </span>
             </Badge>
 
-            <div className="text-5xl md:text-7xl font-extrabold tracking-tight drop-shadow-sharp-black">
+            <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight drop-shadow-sharp-black">
               <h1>
                 Experience the
                 <span className="text-transparent px-2 bg-gradient-to-r from-kasher-dark-green-2 to-kasher-green bg-clip-text">
@@ -131,8 +131,8 @@ export const HeroSection = () => {
               </h1>
             </div>
 
-            <p className="text-lg md:text-xl text-muted-foreground md:leading-relaxed">
-              {`We're more than just a tool, we're a community of passionate
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+              {`We&apos;re more than just a tool, we&apos;re a community of passionate
               creators. Get access to exclusive resources, tutorials, and support.`}
             </p>
           </div>
@@ -143,7 +143,7 @@ export const HeroSection = () => {
                 <CardTitle className="text-2xl font-bold">
                   WHOLESALE INQUIRY
                 </CardTitle>
-                <CardDescription className="text-sm">
+                <CardDescription className="text-base">
                   Interested in getting a wholesale account set up? Fill out
                   this form real quick and we&apos;ll reach out!
                   <br />
