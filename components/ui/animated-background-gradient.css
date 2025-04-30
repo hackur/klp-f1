@@ -1,0 +1,150 @@
+.fake-shader-gradient {
+  /* Kasher Colors */
+  --kasher-primary: #9aca3c;
+  --kasher-secondary-light: #8bbb83;
+  --kasher-secondary-dark: #699029;
+  --kasher-black: #000005;
+  --kasher-white: #ffffff;
+
+  /* Animation and Filter Variables (can be adjusted by variants) */
+  --speed-factor: 4;
+  --saturate: 6;
+  --sepia: 1;
+  --hue: 360deg;
+  --gradient-size: 150%; /* Control size of gradients */
+  --gradient-speed: calc(
+    10s * var(--speed-factor)
+  ); /* Control speed of gradient movement */
+
+  position: relative; /* Needed for absolute positioning of pseudo-elements */
+  overflow: hidden;
+  isolation: isolate; /* Create new stacking context */
+  background-color: var(--kasher-black); /* Fallback background */
+
+  /* Base layer gradient */
+  background-image: radial-gradient(
+      circle at 10% 10%,
+      var(--kasher-primary) 5%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 90%,
+      var(--kasher-secondary-light) 10%,
+      transparent 50%
+    );
+  background-size: var(--gradient-size) var(--gradient-size);
+  background-position: 0% 0%;
+
+  /* Apply hue rotation animation */
+  animation: hue 20s linear infinite; /* Reuse existing hue animation */
+}
+
+.fake-shader-gradient > * {
+  position: relative; /* Ensure children are above pseudo-elements */
+  z-index: 3;
+}
+
+.fake-shader-gradient::before,
+.fake-shader-gradient::after {
+  content: "";
+  position: absolute;
+  z-index: 1; /* Below children */
+  inset: 0; /* Cover the entire parent */
+  background-size: var(--gradient-size) var(--gradient-size);
+  animation: move-gradient var(--gradient-speed) infinite linear alternate; /* New animation for movement */
+  pointer-events: none;
+}
+
+.fake-shader-gradient::before {
+  z-index: 1;
+  mix-blend-mode: hard-light; /* Example blend mode */
+  background-image: radial-gradient(
+      circle at 90% 10%,
+      var(--kasher-secondary-dark) 5%,
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 20% 80%,
+      var(--kasher-primary) 15%,
+      transparent 60%
+    );
+  animation-duration: calc(1s * var(--speed-factor)); /* Faster animation */
+}
+
+.fake-shader-gradient::after {
+  z-index: 2; /* Above ::before, below children */
+  mix-blend-mode: lighten; /* Example blend mode */
+  background-image: radial-gradient(
+      circle at 50% 50%,
+      var(--kasher-white) 2%,
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 10% 90%,
+      var(--kasher-secondary-light) 8%,
+      transparent 40%
+    );
+  animation-duration: calc(1.5s * var(--speed-factor)); /* Different speed */
+  animation-direction: alternate-reverse;
+}
+
+/* Define the gradient movement animation */
+@keyframes move-gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Variant styles (adjust variables and blend modes) */
+/* --- Silk (Example Adaptation) --- */
+.fake-shader-gradient.silk {
+  --speed-factor: 6;
+  --saturate: 10;
+  --sepia: 1;
+  --hue: 360deg;
+}
+.fake-shader-gradient.silk::before {
+  mix-blend-mode: multiply;
+}
+.fake-shader-gradient.silk::after {
+  mix-blend-mode: hard-light;
+}
+
+/* --- Vivid (Example Adaptation) --- */
+.fake-shader-gradient.vivid {
+  --speed-factor: 2;
+  --saturate: 4;
+  --sepia: 0;
+  --hue: 360deg;
+}
+.fake-shader-gradient.vivid::before {
+  mix-blend-mode: luminosity;
+}
+.fake-shader-gradient.vivid::after {
+  mix-blend-mode: color-dodge;
+}
+
+/* --- Metal (Example Adaptation) --- */
+.fake-shader-gradient.metal {
+  --speed-factor: 7;
+  --saturate: 0;
+  --sepia: 0;
+  --hue: 0deg;
+}
+.fake-shader-gradient.metal::before {
+  mix-blend-mode: luminosity;
+}
+.fake-shader-gradient.metal::after {
+  mix-blend-mode: color-dodge;
+}
+
+/* Note: The hue animation keyframes are assumed to exist in globals.css or be provided by Tailwind */
+/* If not, they should be added here or in globals.css:
+@keyframes hue {
+  0% { filter: Saturate(var(--saturate)) Sepia(var(--sepia)) hue-rotate(0deg); }
+  100% { filter: Saturate(var(--saturate)) Sepia(var(--sepia)) hue-rotate(var(--hue)); }
+}
+*/
