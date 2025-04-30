@@ -31,12 +31,12 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#9aca3c",
-          foreground: "#000005",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#8bbb836",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -47,8 +47,8 @@ module.exports = {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "#699029",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -59,9 +59,9 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         kasher: {
-          green: "#9aca3c",
-          "dark-green": "#8bbb836",
-          "dark-green-2": "#699029",
+          green: "#9aca3c", // Primary green
+          darkGreen: "#8bbb36", // Secondary green (fixed typo)
+          deepGreen: "#699029", // Accent green
           black: "#000005",
           white: "#ffffff",
         },

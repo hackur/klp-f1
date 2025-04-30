@@ -16,7 +16,7 @@
     --popover-foreground: 0 0% 1.9%; /* rich-black */
     --primary: 80 61% 51%; /* kasher-green #9aca3c */
     --primary-foreground: 0 0% 1.9%; /* rich-black */
-    --secondary: 100 10% 40%; /* Approximation for dark-green #8bbb836 - adjust as needed */
+    --secondary: 100 10% 40%; /* Approximation for dark-green #8bbb36 */
     --secondary-foreground: 0 0% 100%; /* white */
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -39,7 +39,7 @@
     --popover-foreground: 0 0% 98%; /* white */
     --primary: 80 61% 51%; /* kasher-green */
     --primary-foreground: 0 0% 1.9%; /* rich-black */
-    --secondary: 100 10% 40%; /* Approximation for dark-green */
+    --secondary: 100 10% 40%; /* Approximation for dark-green #8bbb36 */
     --secondary-foreground: 0 0% 98%; /* white */
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;

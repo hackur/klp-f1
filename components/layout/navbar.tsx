@@ -1,5 +1,5 @@
 "use client";
-import { ChevronsDown, Github, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import React from "react";
 import {
   Sheet,
@@ -35,37 +35,38 @@ interface FeatureProps {
 
 const routeList: RouteProps[] = [
   {
-    href: "#testimonials",
-    label: "Testimonials",
+    href: "#how-it-works",
+    label: "How It Works",
   },
   {
-    href: "#team",
-    label: "Team",
-  },
-  {
-    href: "#contact",
-    label: "Contact",
+    href: "#benefits",
+    label: "Benefits",
   },
   {
     href: "#faq",
     label: "FAQ",
   },
+  {
+    href: "#funding",
+    label: "Funding",
+  },
 ];
 
 const featureList: FeatureProps[] = [
   {
-    title: "Showcase Your Value ",
-    description: "Highlight how your product solves user problems.",
+    title: "Custom Branded Kashers",
+    description:
+      "High-quality, laser-engraved Kasher multitools with your logo.",
   },
   {
-    title: "Build Trust",
+    title: "QR Code Integration",
     description:
-      "Leverages social proof elements to establish trust and credibility.",
+      "Smart QR codes that connect physical products to digital engagement.",
   },
   {
-    title: "Capture Leads",
+    title: "Rewards Program",
     description:
-      "Make your lead capture form visually appealing and strategically.",
+      "Complete referral and loyalty system to drive repeat business.",
   },
 ];
 
@@ -74,8 +75,21 @@ export const Navbar = () => {
   return (
     <header className="container shadow-inner bg-opacity-15 top-5 mx-auto sticky border border-border z-40 rounded-2xl flex justify-between items-center p-2 bg-card">
       <Link href="/" className="font-bold text-lg flex items-center">
-        <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
-        Shadcn
+        <Image
+          src="/hero-image-light.jpeg"
+          width={32}
+          height={32}
+          alt="Kasher Logo"
+          className="mr-2 dark:hidden rounded-md"
+        />
+        <Image
+          src="/hero-image-dark.jpeg"
+          width={32}
+          height={32}
+          alt="Kasher Logo"
+          className="mr-2 hidden dark:block rounded-md"
+        />
+        Kasher
       </Link>
       {/* <!-- Mobile --> */}
       <div className="flex items-center lg:hidden">
@@ -95,8 +109,21 @@ export const Navbar = () => {
               <SheetHeader className="mb-4 ml-4">
                 <SheetTitle className="flex items-center">
                   <Link href="/" className="flex items-center">
-                    <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
-                    Shadcn
+                    <Image
+                      src="/hero-image-light.jpeg"
+                      width={32}
+                      height={32}
+                      alt="Kasher Logo"
+                      className="mr-2 dark:hidden rounded-md"
+                    />
+                    <Image
+                      src="/hero-image-dark.jpeg"
+                      width={32}
+                      height={32}
+                      alt="Kasher Logo"
+                      className="mr-2 hidden dark:block rounded-md"
+                    />
+                    Kasher
                   </Link>
                 </SheetTitle>
               </SheetHeader>
@@ -135,8 +162,8 @@ export const Navbar = () => {
             <NavigationMenuContent>
               <div className="grid w-[600px] grid-cols-2 gap-5 p-4">
                 <Image
-                  src="/demo-img.jpg"
-                  alt="Feature demonstration"
+                  src="/hero-image-light.jpeg"
+                  alt="Kasher Product Demonstration"
                   className="h-full w-full rounded-md object-cover"
                   width={600}
                   height={600}
@@ -178,13 +205,18 @@ export const Navbar = () => {
       <div className="hidden lg:flex">
         <ToggleTheme />
 
-        <Button asChild size="sm" variant="ghost" aria-label="View on GitHub">
+        <Button
+          asChild
+          size="sm"
+          variant="ghost"
+          aria-label="Visit Kasher's Main Website"
+        >
           <Link
-            aria-label="View on GitHub"
-            href="https://github.com/nobruf/shadcn-landing-page.git"
+            aria-label="Visit Kasher's Main Website"
+            href="https://mykasher.com"
             target="_blank"
           >
-            <Github className="size-5" />
+            <span className="text-sm">Main Site</span>
           </Link>
         </Button>
       </div>
