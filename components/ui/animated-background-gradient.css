@@ -148,3 +148,149 @@
   100% { filter: Saturate(var(--saturate)) Sepia(var(--sepia)) hue-rotate(var(--hue)); }
 }
 */
+
+/* --- Subtle Green --- */
+.fake-shader-gradient.subtle-green {
+  --speed-factor: 20; /* Much slower */
+  --saturate: 2;
+  --sepia: 0;
+  --hue: 0deg; /* No hue rotation */
+  background-color: #0a1008; /* Dark green background */
+}
+.fake-shader-gradient.subtle-green::before {
+  mix-blend-mode: overlay; /* Softer blend */
+  opacity: 0.5; /* Add transparency */
+  background-image: radial-gradient(
+      circle at 15% 25%,
+      hsla(100, 50%, 60%, 0.3) 5%,
+      /* Transparent green */ transparent 40%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      hsla(90, 40%, 50%, 0.2) 10%,
+      transparent 50%
+    );
+}
+.fake-shader-gradient.subtle-green::after {
+  mix-blend-mode: soft-light; /* Softer blend */
+  opacity: 0.4; /* Add transparency */
+  background-image: radial-gradient(
+      circle at 50% 50%,
+      hsla(110, 60%, 70%, 0.25) 2%,
+      /* Transparent light green */ transparent 25%
+    ),
+    radial-gradient(
+      circle at 20% 80%,
+      hsla(105, 45%, 55%, 0.3) 8%,
+      transparent 40%
+    );
+}
+
+/* --- Subtle White --- */
+.fake-shader-gradient.subtle-white {
+  --speed-factor: 18; /* Adjusted speed */
+  --saturate: 0;
+  --sepia: 0;
+  --hue: 0deg;
+  background-color: #1a1a1a; /* Dark grey background */
+}
+.fake-shader-gradient.subtle-white::before {
+  mix-blend-mode: overlay;
+  opacity: 0.3;
+  background-image: radial-gradient(
+      circle at 10% 90%,
+      hsla(0, 0%, 100%, 0.15) 5%,
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 70% 30%,
+      hsla(0, 0%, 80%, 0.1) 15%,
+      transparent 50%
+    );
+}
+.fake-shader-gradient.subtle-white::after {
+  mix-blend-mode: soft-light;
+  opacity: 0.35;
+  background-image: radial-gradient(
+      circle at 40% 60%,
+      hsla(0, 0%, 100%, 0.1) 3%,
+      /* Transparent white */ transparent 25%
+    ),
+    radial-gradient(
+      circle at 80% 10%,
+      hsla(0, 0%, 90%, 0.12) 10%,
+      transparent 40%
+    );
+}
+
+/* --- Light Mode overrides for Subtle White --- */
+html:not(.dark) .fake-shader-gradient.subtle-white {
+  background-color: #f8f9fa; /* Very light grey background */
+}
+
+html:not(.dark) .fake-shader-gradient.subtle-white::before {
+  opacity: 0.4;
+  mix-blend-mode: multiply; /* Different blend for light bg */
+  background-image: radial-gradient(
+      circle at 10% 90%,
+      hsla(100, 50%, 70%, 0.15) 5%,
+      /* Subtle light green */ transparent 30%
+    ),
+    radial-gradient(
+      circle at 70% 30%,
+      hsla(90, 40%, 60%, 0.1) 15%,
+      transparent 50%
+    );
+}
+
+html:not(.dark) .fake-shader-gradient.subtle-white::after {
+  opacity: 0.35;
+  mix-blend-mode: screen; /* Different blend for light bg */
+  background-image: radial-gradient(
+      circle at 40% 60%,
+      hsla(110, 60%, 80%, 0.1) 3%,
+      /* Subtle lighter green */ transparent 25%
+    ),
+    radial-gradient(
+      circle at 80% 10%,
+      hsla(105, 45%, 75%, 0.12) 10%,
+      transparent 40%
+    );
+}
+
+/* --- Subtle Blue --- */
+.fake-shader-gradient.subtle-blue {
+  --speed-factor: 18;
+  --saturate: 3;
+  --sepia: 0.1;
+  --hue: 0deg; /* No hue rotation, rely on base colors */
+  background-color: #080a10; /* Dark blue background */
+}
+.fake-shader-gradient.subtle-blue::before {
+  mix-blend-mode: overlay;
+  opacity: 0.4;
+  background-image: radial-gradient(
+      circle at 20% 20%,
+      hsla(220, 60%, 60%, 0.25) 5%,
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 75% 80%,
+      hsla(210, 50%, 50%, 0.2) 12%,
+      transparent 50%
+    );
+}
+.fake-shader-gradient.subtle-blue::after {
+  mix-blend-mode: soft-light;
+  opacity: 0.45;
+  background-image: radial-gradient(
+      circle at 60% 40%,
+      hsla(230, 70%, 70%, 0.2) 4%,
+      /* Transparent light blue */ transparent 30%
+    ),
+    radial-gradient(
+      circle at 15% 85%,
+      hsla(215, 55%, 55%, 0.25) 9%,
+      transparent 45%
+    );
+}

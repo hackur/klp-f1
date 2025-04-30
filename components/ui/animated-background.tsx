@@ -6,7 +6,14 @@ import "./animated-background-gradient.css"; // Import the new gradient CSS
 interface AnimatedBackgroundProps {
   children: React.ReactNode;
   className?: string;
-  type?: "vivid" | "metal" | "silk" | "default"; // Add "default"
+  type?:
+    | "vivid"
+    | "metal"
+    | "silk"
+    | "default"
+    | "subtle-green"
+    | "subtle-white"
+    | "subtle-blue"; // Add new types
   // speedFactor?: number; // Speed is now controlled by variants via CSS variables
 }
 
@@ -23,6 +30,9 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
       vivid: type === "vivid",
       metal: type === "metal",
       silk: type === "silk",
+      "subtle-green": type === "subtle-green", // Add handler for subtle-green
+      "subtle-white": type === "subtle-white", // Add handler for subtle-white
+      "subtle-blue": type === "subtle-blue", // Add handler for subtle-blue
       // No extra class for "default"
     },
     className

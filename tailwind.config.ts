@@ -1,5 +1,7 @@
 const animate = require("tailwindcss-animate");
 const defaultTheme = require("tailwindcss/defaultTheme");
+const plugin = require("tailwindcss/plugin");
+import { PluginAPI } from "tailwindcss/types/config";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -119,5 +121,15 @@ module.exports = {
       },
     },
   },
-  plugins: [animate],
+  plugins: [
+    animate,
+    plugin(function ({ addUtilities, theme }: PluginAPI) {
+      addUtilities({
+        ".drop-shadow-sharp-black": {
+          filter:
+            "drop-shadow(2px 2px 0 rgb(0 0 0 / 0.85)) drop-shadow(3px 3px 0 rgb(0 0 0 / 0.6))",
+        },
+      });
+    }),
+  ],
 };
