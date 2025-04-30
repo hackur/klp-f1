@@ -6,9 +6,9 @@ interface ProblemHookProps {
 
 export const ProblemHookSection = ({ content }: ProblemHookProps) => {
   return (
-    <section className="container mx-auto py-16 md:py-24 text-center">
+    <section className="container mx-auto py-12 md:py-16 text-center">
       <div className="max-w-3xl mx-auto">
-        <p className="text-xl md:text-2xl font-medium text-foreground/90 leading-relaxed whitespace-pre-line">
+        <p className="text-lg md:text-xl font-medium text-muted-foreground leading-relaxed whitespace-pre-line">
           {content}
         </p>
       </div>

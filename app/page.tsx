@@ -11,6 +11,8 @@ import { SalesPsychologySection } from "@/components/layout/sections/sales-psych
 import { FAQSection } from "@/components/layout/sections/faq";
 import { FundingSection } from "@/components/layout/sections/funding";
 import { FinalCTASection } from "@/components/layout/sections/final-cta";
+import { FadeIn } from "@/components/ui/fade-in";
+import { SponsorsSection } from "@/components/layout/sections/sponsors";
 
 export const metadata = {
   metadataBase: new URL("https://mykasher.com"),
@@ -28,68 +30,90 @@ export default function Home() {
         description={content.hero.description}
       />
 
-      <ProblemHookSection content={content.hero.description} />
+      <SponsorsSection />
 
-      <WhatIsItSection
-        title={content.whatIsIt.title}
-        description={content.whatIsIt.description}
-        qrDestinations={content.whatIsIt.qrDestinations}
-        modelsIntro={content.whatIsIt.modelsIntro}
-        models={content.whatIsIt.models}
-        modelsOutro={content.whatIsIt.modelsOutro}
-      />
+      <FadeIn delay={300}>
+        <ProblemHookSection content={content.hero.description} />
+      </FadeIn>
 
-      <HowItWorksSection
-        title={content.howItWorks.title}
-        subtitle={content.howItWorks.subtitle}
-        description={content.howItWorks.description}
-        steps={content.howItWorks.steps}
-      />
+      <FadeIn delay={600}>
+        <WhatIsItSection
+          title={content.whatIsIt.title}
+          description={content.whatIsIt.description}
+          qrDestinations={content.whatIsIt.qrDestinations}
+          modelsIntro={content.whatIsIt.modelsIntro}
+          models={content.whatIsIt.models}
+          modelsOutro={content.whatIsIt.modelsOutro}
+        />
+      </FadeIn>
 
-      <BenefitsSection
-        title={content.benefits.title}
-        items={content.benefits.items}
-      />
+      <FadeIn delay={900}>
+        <HowItWorksSection
+          title={content.howItWorks.title}
+          subtitle={content.howItWorks.subtitle}
+          description={content.howItWorks.description}
+          steps={content.howItWorks.steps}
+        />
+      </FadeIn>
 
-      <WhoIsItForSection
-        title={content.whoIsItFor.title}
-        description={content.whoIsItFor.description}
-        types={content.whoIsItFor.types}
-      />
+      <FadeIn delay={1200}>
+        <BenefitsSection
+          title={content.benefits.title}
+          items={content.benefits.items}
+        />
+      </FadeIn>
 
-      <SalesPsychologySection
-        title={content.salesPsychology.title}
-        points={content.salesPsychology.points}
-      />
+      <FadeIn delay={1500}>
+        <WhoIsItForSection
+          title={content.whoIsItFor.title}
+          description={content.whoIsItFor.description}
+          types={content.whoIsItFor.types}
+        />
+      </FadeIn>
 
-      <FAQSection title={content.faq.title} items={content.faq.items} />
+      <FadeIn delay={1800}>
+        <SalesPsychologySection
+          title={content.salesPsychology.title}
+          points={content.salesPsychology.points}
+        />
+      </FadeIn>
 
-      <FundingSection
-        title={content.funding.title}
-        poweredBy={content.funding.poweredBy}
-        tagline={content.funding.tagline}
-        description={content.funding.description}
-        features={content.funding.features}
-        outro={content.funding.outro}
-        ctaPrequalify={content.funding.ctaPrequalify}
-        ctaTalk={content.funding.ctaTalk}
-        logoUrl={content.funding.logoUrl}
-      />
+      <FadeIn delay={2100}>
+        <FAQSection title={content.faq.title} items={content.faq.items} />
+      </FadeIn>
 
-      <FinalCTASection
-        title={content.finalCta.title}
-        description={content.finalCta.description}
-        subtitle={content.finalCta.subtitle}
-        buttonConsultation={content.finalCta.buttonConsultation}
-        consultationSubtitle={content.finalCta.consultationSubtitle}
-        buttonMockup={content.finalCta.buttonMockup}
-        mockupSubtitle={content.finalCta.mockupSubtitle}
-        buttonClaimSpot={content.finalCta.buttonClaimSpot}
-        claimSpotSubtitle={content.finalCta.claimSpotSubtitle}
-        outro={content.finalCta.outro}
-      />
+      <FadeIn delay={2400}>
+        <FundingSection
+          title={content.funding.title}
+          poweredBy={content.funding.poweredBy}
+          tagline={content.funding.tagline}
+          description={content.funding.description}
+          features={content.funding.features}
+          outro={content.funding.outro}
+          ctaPrequalify={content.funding.ctaPrequalify}
+          ctaTalk={content.funding.ctaTalk}
+          logoUrl={content.funding.logoUrl}
+        />
+      </FadeIn>
 
-      <FooterSection />
+      <FadeIn delay={2700}>
+        <FinalCTASection
+          title={content.finalCta.title}
+          description={content.finalCta.description}
+          subtitle={content.finalCta.subtitle}
+          buttonConsultation={content.finalCta.buttonConsultation}
+          consultationSubtitle={content.finalCta.consultationSubtitle}
+          buttonMockup={content.finalCta.buttonMockup}
+          mockupSubtitle={content.finalCta.mockupSubtitle}
+          buttonClaimSpot={content.finalCta.buttonClaimSpot}
+          claimSpotSubtitle={content.finalCta.claimSpotSubtitle}
+          outro={content.finalCta.outro}
+        />
+      </FadeIn>
+
+      <FadeIn delay={3000}>
+        <FooterSection />
+      </FadeIn>
     </>
   );
 }

@@ -1,74 +1,85 @@
 "use client";
+import React from "react";
+import Image from "next/image";
+import { Card } from "@/components/ui/card";
 
-import { Icon } from "@/components/ui/icon";
-import { Marquee } from "@devnomic/marquee";
-import "@devnomic/marquee/dist/index.css";
-import { icons } from "lucide-react";
-interface sponsorsProps {
-  icon: string;
-  name: string;
-}
+const LOGO_SIZE = 100;
 
-const sponsors: sponsorsProps[] = [
+const sponsors = [
   {
-    icon: "Crown",
-    name: "Acmebrand",
+    name: "Lionheart Dispensary",
+    logo: "/logos/sponsor1.png",
   },
   {
-    icon: "Vegan",
-    name: "Acmelogo",
+    name: "High Mountain",
+    logo: "/logos/sponsor2.png",
   },
   {
-    icon: "Ghost",
-    name: "Acmesponsor",
+    name: "Lifted Supply",
+    logo: "/logos/sponsor3.png",
   },
   {
-    icon: "Puzzle",
-    name: "Acmeipsum",
+    name: "GreenHaus",
+    logo: "/logos/sponsor4.png",
   },
   {
-    icon: "Squirrel",
-    name: "Acme",
-  },
-  {
-    icon: "Cookie",
-    name: "Accmee",
-  },
-  {
-    icon: "Drama",
-    name: "Acmetech",
+    name: "Fuller Dreamz",
+    logo: "/logos/sponsor5.png",
   },
 ];
 
 export const SponsorsSection = () => {
   return (
-    <section id="sponsors" className="max-w-[75%] mx-auto pb-24 sm:pb-32">
-      <h2 className="text-lg md:text-xl text-center mb-6">
-        Our Platinum Sponsors
-      </h2>
+    <section className="py-12 md:py-16 overflow-hidden bg-card/50 backdrop-blur-sm border-y">
+      <div className="container">
+        <div className="text-center mb-8">
+          <h3 className="text-lg font-medium text-muted-foreground mb-2">
+            Trusted by Industry Leaders
+          </h3>
+        </div>
 
-      <div className="mx-auto">
-        <Marquee
-          className="gap-[3rem]"
-          fade
-          innerClassName="gap-[3rem]"
-          pauseOnHover
-        >
-          {sponsors.map(({ icon, name }) => (
-            <div
-              key={name}
-              className="flex items-center text-xl md:text-2xl font-medium"
-            >
-              <Icon
-                name={icon as keyof typeof icons}
-                size={32}
-                color="white"
-                className="mr-2"
-              />
-              {name}
-            </div>
-          ))}
-        </Marquee>
+        {/* Infinite Scrolling Logo Row */}
+        <div className="relative">
+          {/* Gradient Overlays */}
+          <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-background to-transparent z-10" />
+          <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-background to-transparent z-10" />
+
+          {/* Scrolling Container */}
+          <div className="flex gap-16 animate-[scroll_20s_linear_infinite] hover:pause">
+            {/* First set of logos */}
+            {sponsors.map((sponsor, i) => (
+              <Card
+                key={`first-${i}`}
+                className="shrink-0 flex items-center justify-center p-6 bg-card/50 hover:bg-card/80 transition-colors"
+              >
+                <div className="w-[100px] h-[60px] relative grayscale hover:grayscale-0 transition-all">
+                  <Image
+                    src={sponsor.logo}
+                    alt={sponsor.name}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </Card>
+            ))}
+            {/* Duplicate set for seamless scrolling */}
+            {sponsors.map((sponsor, i) => (
+              <Card
+                key={`second-${i}`}
+                className="shrink-0 flex items-center justify-center p-6 bg-card/50 hover:bg-card/80 transition-colors"
+              >
+                <div className="w-[100px] h-[60px] relative grayscale hover:grayscale-0 transition-all">
+                  <Image
+                    src={sponsor.logo}
+                    alt={sponsor.name}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
