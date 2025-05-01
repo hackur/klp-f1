@@ -1,59 +1,119 @@
-import { BenefitsSection } from "@/components/layout/sections/benefits";
-import { CommunitySection } from "@/components/layout/sections/community";
-import { ContactSection } from "@/components/layout/sections/contact";
-import { FAQSection } from "@/components/layout/sections/faq";
-import { FeaturesSection } from "@/components/layout/sections/features";
+import { getLandingContent } from "@/lib/i18n";
+
 import { FooterSection } from "@/components/layout/sections/footer";
 import { HeroSection } from "@/components/layout/sections/hero";
-import { PricingSection } from "@/components/layout/sections/pricing";
-import { ServicesSection } from "@/components/layout/sections/services";
+import { ProblemHookSection } from "@/components/layout/sections/problem-hook";
+import { WhatIsItSection } from "@/components/layout/sections/what-is-it";
+import { HowItWorksSection } from "@/components/layout/sections/how-it-works";
+import { BenefitsSection } from "@/components/layout/sections/benefits";
+import { WhoIsItForSection } from "@/components/layout/sections/who-is-it-for";
+import { SalesPsychologySection } from "@/components/layout/sections/sales-psychology";
+import { FAQSection } from "@/components/layout/sections/faq";
+import { FundingSection } from "@/components/layout/sections/funding";
+import { FinalCTASection } from "@/components/layout/sections/final-cta";
+import { FadeIn } from "@/components/ui/fade-in";
 import { SponsorsSection } from "@/components/layout/sections/sponsors";
-import { TeamSection } from "@/components/layout/sections/team";
-import { TestimonialSection } from "@/components/layout/sections/testimonial";
 
 export const metadata = {
-  title: "Shadcn - Landing template",
-  description: "Free Shadcn landing page for developers",
-  openGraph: {
-    type: "website",
-    url: "https://github.com/nobruf/shadcn-landing-page.git",
-    title: "Shadcn - Landing template",
-    description: "Free Shadcn landing page for developers",
-    images: [
-      {
-        url: "https://res.cloudinary.com/dbzv9xfjp/image/upload/v1723499276/og-images/shadcn-vue.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Shadcn - Landing template",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    site: "https://github.com/nobruf/shadcn-landing-page.git",
-    title: "Shadcn - Landing template",
-    description: "Free Shadcn landing page for developers",
-    images: [
-      "https://res.cloudinary.com/dbzv9xfjp/image/upload/v1723499276/og-images/shadcn-vue.jpg",
-    ],
-  },
+  metadataBase: new URL("https://mykasher.com"),
+  ...getLandingContent().meta,
 };
 
 export default function Home() {
+  const content = getLandingContent();
+
   return (
     <>
-      <HeroSection />
+      <HeroSection
+        title={content.hero.title}
+        subtitle={content.hero.subtitle}
+        description={content.hero.description}
+      />
+
       <SponsorsSection />
-      <BenefitsSection />
-      <FeaturesSection />
-      <ServicesSection />
-      <TestimonialSection />
-      <TeamSection />
-      <CommunitySection />
-      <PricingSection />
-      <ContactSection />
-      <FAQSection />
-      <FooterSection />
+
+      <FadeIn delay={300}>
+        <ProblemHookSection content={content.hero.description} />
+      </FadeIn>
+
+      <FadeIn delay={600}>
+        <WhatIsItSection
+          title={content.whatIsIt.title}
+          description={content.whatIsIt.description}
+          qrDestinations={content.whatIsIt.qrDestinations}
+          modelsIntro={content.whatIsIt.modelsIntro}
+          models={content.whatIsIt.models}
+          modelsOutro={content.whatIsIt.modelsOutro}
+        />
+      </FadeIn>
+
+      <FadeIn delay={900}>
+        <HowItWorksSection
+          title={content.howItWorks.title}
+          subtitle={content.howItWorks.subtitle}
+          description={content.howItWorks.description}
+          steps={content.howItWorks.steps}
+        />
+      </FadeIn>
+
+      <FadeIn delay={1200}>
+        <BenefitsSection
+          title={content.benefits.title}
+          items={content.benefits.items}
+        />
+      </FadeIn>
+
+      <FadeIn delay={1500}>
+        <WhoIsItForSection
+          title={content.whoIsItFor.title}
+          description={content.whoIsItFor.description}
+          types={content.whoIsItFor.types}
+        />
+      </FadeIn>
+
+      <FadeIn delay={1800}>
+        <SalesPsychologySection
+          title={content.salesPsychology.title}
+          points={content.salesPsychology.points}
+        />
+      </FadeIn>
+
+      <FadeIn delay={2100}>
+        <FAQSection title={content.faq.title} items={content.faq.items} />
+      </FadeIn>
+
+      <FadeIn delay={2400}>
+        <FundingSection
+          title={content.funding.title}
+          poweredBy={content.funding.poweredBy}
+          tagline={content.funding.tagline}
+          description={content.funding.description}
+          features={content.funding.features}
+          outro={content.funding.outro}
+          ctaPrequalify={content.funding.ctaPrequalify}
+          ctaTalk={content.funding.ctaTalk}
+          logoUrl={content.funding.logoUrl}
+        />
+      </FadeIn>
+
+      <FadeIn delay={2700}>
+        <FinalCTASection
+          title={content.finalCta.title}
+          description={content.finalCta.description}
+          subtitle={content.finalCta.subtitle}
+          buttonConsultation={content.finalCta.buttonConsultation}
+          consultationSubtitle={content.finalCta.consultationSubtitle}
+          buttonMockup={content.finalCta.buttonMockup}
+          mockupSubtitle={content.finalCta.mockupSubtitle}
+          buttonClaimSpot={content.finalCta.buttonClaimSpot}
+          claimSpotSubtitle={content.finalCta.claimSpotSubtitle}
+          outro={content.finalCta.outro}
+        />
+      </FadeIn>
+
+      <FadeIn delay={3000}>
+        <FooterSection />
+      </FadeIn>
     </>
   );
 }

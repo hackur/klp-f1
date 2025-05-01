@@ -1,0 +1,118 @@
+/* Base gradient styles */
+.fake-shader-gradient {
+  @apply relative;
+}
+
+.fake-shader-gradient::before {
+  @apply absolute inset-0 -z-10;
+  content: "";
+  background-size: 400% 400%;
+  opacity: 0.6;
+  animation: gradientShift 30s ease-in-out infinite;
+}
+
+/* Default gradient - subtle green */
+.fake-shader-gradient::before {
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(154, 202, 60, 0.08),
+    rgba(105, 144, 41, 0.03) 45%,
+    rgba(154, 202, 60, 0.06) 75%
+  );
+}
+
+/* Vivid gradient */
+.fake-shader-gradient.vivid::before {
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(154, 202, 60, 0.7),
+    rgba(105, 144, 41, 0.3) 45%,
+    rgba(154, 202, 60, 0.5) 75%
+  );
+  opacity: 1;
+  animation: gradientShift 15s ease-in-out infinite;
+}
+
+/* Light mode adjustment for vivid gradient */
+:root[data-theme="light"] .fake-shader-gradient.vivid::before {
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(105, 144, 41, 0.6),
+    rgba(80, 110, 30, 0.3) 45%,
+    rgba(105, 144, 41, 0.4) 75%
+  );
+  opacity: 0.9;
+}
+
+/* Metal gradient */
+.fake-shader-gradient.metal::before {
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(220, 220, 220, 0.1),
+    rgba(180, 180, 180, 0.05) 45%,
+    rgba(200, 200, 200, 0.08) 75%
+  );
+  animation: gradientShift 25s ease-in-out infinite;
+}
+
+/* Silk gradient */
+.fake-shader-gradient.silk::before {
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0.08),
+    rgba(240, 240, 240, 0.03) 45%,
+    rgba(255, 255, 255, 0.06) 75%
+  );
+  animation: gradientShift 35s ease-in-out infinite;
+}
+
+/* Subtle green gradient */
+.fake-shader-gradient.subtle-green::before {
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(154, 202, 60, 0.06),
+    rgba(105, 144, 41, 0.02) 45%,
+    rgba(154, 202, 60, 0.04) 75%
+  );
+  opacity: 0.5;
+  animation: gradientShift 40s ease-in-out infinite;
+}
+
+/* Subtle white gradient */
+.fake-shader-gradient.subtle-white::before {
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0.06),
+    rgba(240, 240, 240, 0.02) 45%,
+    rgba(255, 255, 255, 0.04) 75%
+  );
+  opacity: 0.5;
+  animation: gradientShift 40s ease-in-out infinite;
+}
+
+/* Subtle blue gradient */
+.fake-shader-gradient.subtle-blue::before {
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(60, 130, 202, 0.06),
+    rgba(41, 105, 144, 0.02) 45%,
+    rgba(60, 130, 202, 0.04) 75%
+  );
+  opacity: 0.5;
+  animation: gradientShift 40s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0.7;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 1;
+  }
+  100% {
+    background-position: 0% 50%;
+    opacity: 0.7;
+  }
+}
