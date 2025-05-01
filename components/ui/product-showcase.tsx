@@ -12,16 +12,41 @@ import { Button } from "@/components/ui/button"
 import { type CarouselApi } from "@/components/ui/carousel"
 import { motion } from "framer-motion"
 
+/**
+ * Interface representing a product image with source and alt text.
+ * @interface ProductImage
+ * @property {string} src - The URL or path to the image.
+ * @property {string} alt - The alt text description of the image.
+ */
 interface ProductImage {
   src: string
   alt: string
 }
 
+/**
+ * Interface representing a product feature section.
+ * @interface ProductFeature
+ * @property {string} title - The title of the feature section.
+ * @property {string[]} details - Array of detailed feature points.
+ */
 interface ProductFeature {
   title: string
   details: string[]
 }
 
+/**
+ * Interface representing a complete product with all its details.
+ * @interface Product
+ * @property {string} title - The main title of the product.
+ * @property {string} subtitle - A short descriptive subtitle.
+ * @property {string} description - Detailed product description.
+ * @property {ProductFeature[]} features - Array of product features.
+ * @property {string[]} specs - Array of technical specifications.
+ * @property {string} price - Current price of the product.
+ * @property {string} [originalPrice] - Original price before discount (optional).
+ * @property {ProductImage[]} images - Array of product images.
+ * @property {boolean} [isOnSale] - Whether the product is on sale (optional).
+ */
 interface Product {
   title: string
   subtitle: string
@@ -34,6 +59,10 @@ interface Product {
   isOnSale?: boolean
 }
 
+/**
+ * Array of product data following Kasher's brand standards and product lineup.
+ * @constant
+ */
 const products: Product[] = [
   {
     title: "TITANIUM Kasher Classic®",
@@ -144,10 +173,35 @@ const products: Product[] = [
   }
 ]
 
+/**
+ * ProductShowcase Component
+ * 
+ * A component that displays a carousel of premium titanium products with detailed information.
+ * Features automatic rotation, animated transitions, and responsive design.
+ * Follows Kasher brand standards for typography and colors.
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * import ProductShowcase from "@/components/ui/product-showcase"
+ * 
+ * export default function Page() {
+ *   return <ProductShowcase />
+ * }
+ * ```
+ */
 const ProductShowcase = () => {
+  // Track carousel API and active index
   const [api, setApi] = React.useState<CarouselApi>()
   const [activeIndex, setActiveIndex] = React.useState(0)
 
+  /**
+   * Effect hook to handle carousel interactions and autoplay.
+   * Sets up:
+   * - Active index tracking
+   * - Automatic rotation every 6 seconds
+   * - Cleanup on unmount
+   */
   React.useEffect(() => {
     if (!api) return
 

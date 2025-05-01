@@ -64,7 +64,7 @@ const featureList: FeatureProps[] = [
 
 export const Navbar = () => {
   return (
-    <header className="sticky relative container top-5 mx-auto z-40 rounded-2xl flex justify-between items-center p-4 backdrop-blur-md bg-white/70 dark:bg-black/70">
+    <header className="sticky relative container top-5 mx-auto z-40 rounded-2xl flex justify-between items-center p-4 backdrop-blur-md bg-white/60 dark:bg-black/60">
       <Link href="/" className="font-bold text-lg flex items-center">
         <Image
           src="/logos/KasherLogoHorizontal_WordmarkAndShieldVariation_CMYK_LightBackground_copy_300x.png"
@@ -80,7 +80,6 @@ export const Navbar = () => {
           alt="Kasher Logo"
           className="mr-2 hidden dark:block rounded-md"
         />
-        Kasher
       </Link>
       <NavigationMenu className="hidden lg:block">
         <NavigationMenuList>
