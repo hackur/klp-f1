@@ -10,41 +10,43 @@ async function ensureTableExists() {
       .select("id")
       .limit(1);
 
+    // If table doesn't exist, we'll get null. Let's try to insert and catch any table-not-exists error
     if (tableExists === null) {
-      // Execute raw SQL to create table
-      const { error } = await supabaseAdmin.from("form_submissions").insert([
-        {
-          step: 0,
-          data: {},
-          status: "in_progress",
-        },
-      ]);
-
-      // If the table doesn't exist, this will fail with a specific error
-      if (error?.code === "42P01") {
-        // Table doesn't exist, create it
-        const { error: createError } = await supabaseAdmin
-          .from("_sqlquery")
-          .rpc("execute", {
-            query_text: `
-          CREATE TABLE IF NOT EXISTS form_submissions (
-            id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-            step INTEGER NOT NULL,
-            data JSONB NOT NULL,
-            submitted_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-            status TEXT NOT NULL CHECK (status IN ('in_progress', 'completed')),
-            created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-          );
-          
-          CREATE INDEX IF NOT EXISTS idx_form_submissions_status ON form_submissions(status);
-          CREATE INDEX IF NOT EXISTS idx_form_submissions_submitted_at ON form_submissions(submitted_at);
-        `,
+      try {
+        // Attempt to insert a test record
+        const { error: insertError } = await supabaseAdmin
+          .from("form_submissions")
+          .insert({
+            step: 0,
+            data: {},
+            status: "in_progress",
           });
 
-        if (createError) {
-          console.error("Error creating table:", createError);
-          throw createError;
+        if (insertError?.code === "42P01") {
+          // Table doesn't exist, create it using REST API
+          const baseUrl = process.env.SUPABASE_URL;
+          const apiKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+          const response = await fetch(
+            `${baseUrl}/rest/v1/rpc/create_form_table`,
+            {
+              method: "POST",
+              headers: {
+                apikey: apiKey!,
+                Authorization: `Bearer ${apiKey}`,
+                "Content-Type": "application/json",
+                Prefer: "return=minimal",
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`Failed to create table: ${await response.text()}`);
+          }
         }
+      } catch (error) {
+        console.error("Error during table creation:", error);
+        throw error;
       }
     }
   } catch (error) {
