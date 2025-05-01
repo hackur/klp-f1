@@ -1,15 +1,7 @@
 "use client";
-import { Menu } from "lucide-react";
+
 import React from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "../ui/sheet";
-import { Separator } from "../ui/separator";
+import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -17,8 +9,8 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "../ui/navigation-menu";
-import { Button } from "../ui/button";
+} from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { ToggleTheme } from "./toogle-theme";
@@ -71,92 +63,29 @@ const featureList: FeatureProps[] = [
 ];
 
 export const Navbar = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
   return (
-    <header className="header-adjustments container top-5 mx-auto sticky border border-border z-40 rounded-2xl flex justify-between items-center p-2 bg-card/50 backdrop-blur-[2px]">
+    <header className="relative container top-5 mx-auto z-40 rounded-2xl flex justify-between items-center p-4 backdrop-blur-[2px]">
       <Link href="/" className="font-bold text-lg flex items-center">
         <Image
-          src="/hero-image-light.jpeg"
-          width={32}
-          height={32}
+          src="/logos/KasherLogoHorizontal_WordmarkAndShieldVariation_CMYK_LightBackground_copy_300x.png"
+          width={150}
+          height={50}
           alt="Kasher Logo"
           className="mr-2 dark:hidden rounded-md"
         />
         <Image
-          src="/hero-image-dark.jpeg"
-          width={32}
-          height={32}
+          src="/logos/KasherLogoHorizontal_WordmarkAndShieldVariation_CMYK_LightBackground_copy_300x.png"
+          width={150}
+          height={50}
           alt="Kasher Logo"
           className="mr-2 hidden dark:block rounded-md"
         />
         Kasher
       </Link>
-      {/* <!-- Mobile --> */}
-      <div className="flex items-center lg:hidden">
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Menu
-              onClick={() => setIsOpen(!isOpen)}
-              className="cursor-pointer lg:hidden"
-            />
-          </SheetTrigger>
-
-          <SheetContent
-            side="left"
-            className="flex flex-col justify-between rounded-tr-2xl rounded-br-2xl bg-card/80 backdrop-blur-[2px] border-secondary"
-          >
-            <div>
-              <SheetHeader className="mb-4 ml-4">
-                <SheetTitle className="flex items-center">
-                  <Link href="/" className="flex items-center">
-                    <Image
-                      src="/hero-image-light.jpeg"
-                      width={32}
-                      height={32}
-                      alt="Kasher Logo"
-                      className="mr-2 dark:hidden rounded-md"
-                    />
-                    <Image
-                      src="/hero-image-dark.jpeg"
-                      width={32}
-                      height={32}
-                      alt="Kasher Logo"
-                      className="mr-2 hidden dark:block rounded-md"
-                    />
-                    Kasher
-                  </Link>
-                </SheetTitle>
-              </SheetHeader>
-
-              <div className="flex flex-col gap-2">
-                {routeList.map(({ href, label }) => (
-                  <Button
-                    key={href}
-                    onClick={() => setIsOpen(false)}
-                    asChild
-                    variant="ghost"
-                    className="justify-start text-base"
-                  >
-                    <Link href={href}>{label}</Link>
-                  </Button>
-                ))}
-              </div>
-            </div>
-
-            <SheetFooter className="flex-col sm:flex-col justify-start items-start">
-              <Separator className="mb-2" />
-
-              <ToggleTheme />
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-      </div>
-
-      {/* <!-- Desktop --> */}
       <NavigationMenu className="hidden lg:block">
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="bg-card text-base">
+            <NavigationMenuTrigger className="text-base">
               Features
             </NavigationMenuTrigger>
             <NavigationMenuContent>
