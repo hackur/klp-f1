@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+header.header-adjustments {
+  margin: -45px 45px;
+  margin-right: -45px;
+  width: calc(100% - 90px);
+}
+
 @layer utilities {
   .animate-gradient {
     animation: gradient 8s ease-in-out infinite;
