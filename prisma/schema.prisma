@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum BusinessInterest {
+  PRICING_ONLY
+  READY_TO_BUY
+  CUSTOM_READY
+  CUSTOM_LATER
+  MULTI_LOCATION_SMALL
+  MULTI_LOCATION_MEDIUM
+  CHAIN_BULK
+}
+
+model WholesaleInquiry {
+  id            String    @id @default(cuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Contact Information
+  firstName     String
+  lastName      String
+  mobileNumber  String
+  email        String
+  businessName String
+  businessTaxId String?
+
+  // Business Address
+  street1      String
+  street2      String?
+  city         String
+  state        String
+  postalCode   String
+  country      String
+
+  // Business Interest
+  interest     BusinessInterest
+
+  // Metadata
+  submittedAt  DateTime  @default(now())
+  status       String    @default("PENDING")
+  notes        String?
+}
