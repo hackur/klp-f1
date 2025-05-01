@@ -64,7 +64,7 @@ const featureList: FeatureProps[] = [
 
 export const Navbar = () => {
   return (
-    <header className="relative container top-5 mx-auto z-40 rounded-2xl flex justify-between items-center p-4 backdrop-blur-[2px]">
+    <header className="header-adjustments sticky relative container top-5 mx-auto z-40 rounded-2xl flex justify-between items-center p-4 backdrop-blur-[2px]">
       <Link href="/" className="font-bold text-lg flex items-center">
         <Image
           src="/logos/KasherLogoHorizontal_WordmarkAndShieldVariation_CMYK_LightBackground_copy_300x.png"
@@ -149,6 +149,30 @@ export const Navbar = () => {
           </Link>
         </Button>
       </div>
+      <NavigationMenu className="hidden lg:block">
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger className="text-base">
+              Black Titanium Collection
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <div className="grid w-[600px] grid-cols-3 gap-5 p-4">
+                {/* Black Titanium Images */}
+                {["001-Titanium2_600x.webp", "002-Titanium1_800x.webp", "K-Ti_BLK_600x.webp", "K-Ti_BLK-L_600x.webp", "K-Ti_gld_800x-1.webp", "K-Ti_gld_800x.webp", "K-Ti_gld-L_600x.webp", "SidePic-Titanium_600x.webp", "Titanium-Back_600x.webp", "TitaniumFront_600x.webp"].map((filename) => (
+                  <Image
+                    key={filename}
+                    src={`/black-titanium/${filename}`}
+                    alt={filename}
+                    width={200}
+                    height={200}
+                    className="rounded-md object-cover"
+                  />
+                ))}
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
     </header>
   );
 };
