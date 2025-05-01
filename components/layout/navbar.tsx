@@ -64,7 +64,7 @@ const featureList: FeatureProps[] = [
 
 export const Navbar = () => {
   return (
-    <header className="header-adjustments sticky relative container top-5 mx-auto z-40 rounded-2xl flex justify-between items-center p-4 backdrop-blur-[2px]">
+    <header className="sticky relative container top-5 mx-auto z-40 rounded-2xl flex justify-between items-center p-4 backdrop-blur-md bg-white/70 dark:bg-black/70">
       <Link href="/" className="font-bold text-lg flex items-center">
         <Image
           src="/logos/KasherLogoHorizontal_WordmarkAndShieldVariation_CMYK_LightBackground_copy_300x.png"
