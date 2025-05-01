@@ -122,12 +122,22 @@ export function MultiStepForm() {
     interest: "PRICING_ONLY",
   };
 
+  // Initialize form with step-specific validation
   // Initialize form
   const form = useForm<WholesaleFormData>({
-    resolver: zodResolver(wholesaleFormSchema),
     defaultValues,
-    mode: "onSubmit", // Validate on form submission
-    reValidateMode: "onChange", // But re-validate on change after submission
+    mode: "onSubmit",
+    reValidateMode: "onChange",
+    // Use step-specific validation
+    resolver: zodResolver(
+      currentStep === 1
+        ? step1Schema
+        : currentStep === 2
+        ? step2Schema
+        : currentStep === 3
+        ? step3Schema
+        : wholesaleFormSchema
+    ),
   });
 
   // Load saved form data on initial render
@@ -215,41 +225,60 @@ export function MultiStepForm() {
       console.log("Step validation successful");
 
       // Get current step data
-      const currentStepData = steps[currentStep - 1].fieldGroups.reduce(
-        (acc, field) => {
-          if (field === "address") {
-            return { ...acc, address: data.address };
-          }
-          return { ...acc, [field]: data[field as keyof WholesaleFormData] };
-        },
-        {}
-      );
-
-      console.log(`Submitting step ${currentStep} data:`, currentStepData);
-
-      try {
-        // Submit current step
-        const response = await fetch("/api/submit-form", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            step: currentStep,
-            data: currentStepData,
-            timestamp: new Date().toISOString(),
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+      const stepFields = steps[currentStep - 1].fieldGroups;
+      const currentStepData = stepFields.reduce((acc, field) => {
+        if (field === "address") {
+          return { ...acc, address: data.address };
         }
+        return { ...acc, [field]: data[field as keyof WholesaleFormData] };
+      }, {});
 
-        const result = await response.json();
-        console.log(`Step ${currentStep} API response:`, result);
+      // Add metadata
+      const submissionData = {
+        ...currentStepData,
+        submittedAt: new Date().toISOString(),
+      };
 
-        // Only proceed if API call was successful
-        if (result.success) {
-          // Clear any existing errors
+      console.log(`Submitting step ${currentStep} data:`, submissionData);
+
+      let retryCount = 0;
+      const maxRetries = 3;
+
+      while (retryCount < maxRetries) {
+        try {
+          const response = await fetch("/api/submit-form", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              step: currentStep,
+              data: submissionData,
+            }),
+          });
+
+          const result = await response.json();
+          console.log(`Step ${currentStep} API response:`, result);
+
+          if (!response.ok || !result.success) {
+            throw new Error(result.error || "Failed to save data");
+          }
+
+          // Success! Clear errors and proceed
           form.clearErrors();
+
+          // Store the successful submission in localStorage
+          const savedData = JSON.parse(
+            localStorage.getItem(FORM_STORAGE_KEY) || "{}"
+          );
+          localStorage.setItem(
+            FORM_STORAGE_KEY,
+            JSON.stringify({
+              ...savedData,
+              [`step${currentStep}`]: {
+                data: submissionData,
+                submittedAt: new Date().toISOString(),
+              },
+            })
+          );
 
           // Handle step progression
           if (currentStep < steps.length) {
@@ -257,77 +286,43 @@ export function MultiStepForm() {
             setCurrentStep((current) => current + 1);
           } else {
             console.log("Form completed, showing success state");
-            // Final step - show completion
             localStorage.removeItem(FORM_STORAGE_KEY);
             setIsSubmitted(true);
           }
-        } else {
-          throw new Error("API returned success: false");
+
+          // Exit the retry loop on success
+          break;
+        } catch (error) {
+          console.error(`Attempt ${retryCount + 1} failed:`, error);
+          retryCount++;
+
+          if (retryCount === maxRetries) {
+            throw new Error(
+              "Failed to submit form after multiple attempts. Please try again."
+            );
+          }
+
+          // Wait before retrying (exponential backoff)
+          await new Promise((resolve) =>
+            setTimeout(resolve, Math.pow(2, retryCount) * 1000)
+          );
         }
-      } catch (apiError) {
-        console.error("API error:", apiError);
-        form.setError("root" as any, {
-          type: "submit",
-          message: "Failed to save. Please try again.",
-        });
-        return; // Don't proceed to next step if API call failed
       }
     } catch (error) {
-      console.error("Form error:", error);
+      console.error("Form submission error:", error);
       form.setError("root" as any, {
         type: "submit",
-        message: "Please fix the errors above and try again.",
+        message: error instanceof Error ? error.message : "An error occurred",
       });
     } finally {
       setIsLoading(false);
     }
   }
 
-  // Function to validate the current step
+  // Simplified validation since it's now handled by the form resolver
   const validateCurrentStep = async () => {
-    console.log(`Validating step ${currentStep}...`);
-    const currentData = form.getValues();
-
-    try {
-      let validation;
-      if (currentStep === 1) {
-        validation = await step1Schema.safeParseAsync({
-          firstName: currentData.firstName,
-          lastName: currentData.lastName,
-          email: currentData.email,
-          interest: currentData.interest,
-        });
-      } else if (currentStep === 2) {
-        validation = await step2Schema.safeParseAsync({
-          businessName: currentData.businessName,
-          businessTaxId: currentData.businessTaxId,
-          mobileNumber: currentData.mobileNumber,
-        });
-      } else if (currentStep === 3) {
-        validation = await step3Schema.safeParseAsync({
-          address: currentData.address,
-        });
-      }
-
-      if (!validation?.success) {
-        console.log("Validation failed:", validation?.error?.errors);
-        // Show validation errors in the form
-        if (validation?.error?.errors) {
-          validation.error.errors.forEach((error) => {
-            form.setError(error.path.join(".") as any, {
-              message: error.message,
-            });
-          });
-        }
-        return false;
-      }
-
-      console.log("Validation successful");
-      return true;
-    } catch (error) {
-      console.error("Validation error:", error);
-      return false;
-    }
+    const result = await form.trigger();
+    return result;
   };
 
   const StepIndicator = ({ step }: { step: Step }) => {
