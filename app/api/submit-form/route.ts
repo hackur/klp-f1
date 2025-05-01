@@ -4,10 +4,18 @@ import { supabaseAdmin } from "@/lib/supabase";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log("Received form submission for step:", body.step);
-    console.log("Form data:", body.data);
+    console.log("API Route - Environment check:", {
+      hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    });
+
+    console.log("API Route - Request body:", {
+      step: body.step,
+      hasData: !!body.data,
+    });
 
     // Insert form data into Supabase
+    console.log("API Route - Attempting Supabase insert...");
     const { data, error } = await supabaseAdmin
       .from("form_submissions")
       .insert([
@@ -22,11 +30,24 @@ export async function POST(request: Request) {
       .single();
 
     if (error) {
-      console.error("Supabase error:", error);
-      throw error;
+      console.error(
+        "API Route - Supabase error details:",
+        JSON.stringify(error, null, 2)
+      );
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Database error",
+          error: error.message || "Failed to save to database",
+        },
+        { status: 500 }
+      );
     }
 
-    console.log("Successfully saved to Supabase:", data);
+    console.log(
+      "API Route - Successfully saved to Supabase:",
+      JSON.stringify(data, null, 2)
+    );
 
     return NextResponse.json({
       success: true,
@@ -34,12 +55,14 @@ export async function POST(request: Request) {
       data: data,
     });
   } catch (error) {
-    console.error("Error processing form submission:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : JSON.stringify(error);
+    console.error("Error processing form submission:", errorMessage);
     return NextResponse.json(
       {
         success: false,
         message: "Failed to process form submission",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: errorMessage,
       },
       { status: 500 }
     );
