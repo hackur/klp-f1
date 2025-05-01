@@ -42,6 +42,10 @@ const routeList: RouteProps[] = [
     href: "#funding",
     label: "Funding",
   },
+  {
+    href: "/wholesale",
+    label: "Wholesale",
+  },
 ];
 
 const featureList: FeatureProps[] = [
@@ -64,7 +68,7 @@ const featureList: FeatureProps[] = [
 
 export const Navbar = () => {
   return (
-    <header className="sticky relative container top-5 mx-auto z-40 rounded-2xl flex justify-between items-center p-4 backdrop-blur-md bg-white/60 dark:bg-black/60">
+    <header className="header-adjustments sticky relative container top-5 mx-auto z-40 rounded-2xl flex justify-between items-center p-4 backdrop-blur-md bg-white/60 dark:bg-black/60">
       <Link href="/" className="font-bold text-lg flex items-center">
         <Image
           src="/logos/KasherLogoHorizontal_WordmarkAndShieldVariation_CMYK_LightBackground_copy_300x.png"
@@ -130,7 +134,14 @@ export const Navbar = () => {
         </NavigationMenuList>
       </NavigationMenu>
 
-      <div className="hidden lg:flex">
+      <div className="hidden lg:flex items-center gap-4">
+        <Link
+          href="/font-test"
+          className="text-sm px-3 text-muted-foreground hover:text-foreground"
+        >
+          Font Test
+        </Link>
+
         <ToggleTheme />
 
         <Button
@@ -148,6 +159,7 @@ export const Navbar = () => {
           </Link>
         </Button>
       </div>
+
       <NavigationMenu className="hidden lg:block">
         <NavigationMenuList>
           <NavigationMenuItem>
@@ -156,8 +168,18 @@ export const Navbar = () => {
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <div className="grid w-[600px] grid-cols-3 gap-5 p-4">
-                {/* Black Titanium Images */}
-                {["001-Titanium2_600x.webp", "002-Titanium1_800x.webp", "K-Ti_BLK_600x.webp", "K-Ti_BLK-L_600x.webp", "K-Ti_gld_800x-1.webp", "K-Ti_gld_800x.webp", "K-Ti_gld-L_600x.webp", "SidePic-Titanium_600x.webp", "Titanium-Back_600x.webp", "TitaniumFront_600x.webp"].map((filename) => (
+                {[
+                  "001-Titanium2_600x.webp",
+                  "002-Titanium1_800x.webp",
+                  "K-Ti_BLK_600x.webp",
+                  "K-Ti_BLK-L_600x.webp",
+                  "K-Ti_gld_800x-1.webp",
+                  "K-Ti_gld_800x.webp",
+                  "K-Ti_gld-L_600x.webp",
+                  "SidePic-Titanium_600x.webp",
+                  "Titanium-Back_600x.webp",
+                  "TitaniumFront_600x.webp",
+                ].map((filename) => (
                   <Image
                     key={filename}
                     src={`/black-titanium/${filename}`}

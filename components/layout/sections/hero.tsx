@@ -1,59 +1,64 @@
-"use client";
-import { Badge } from "@/components/ui/badge";
-import AnimatedBackground from "@/components/ui/animated-background";
-import { useTheme } from "next-themes";
-import { MultiStepForm } from "@/components/ui/multi-step-form";
+import Image from "next/image"
+import { MultiStepForm } from "@/components/ui/multi-step-form"
 
-interface HeroSectionProps {
-  title: string;
-  subtitle: string;
-  description: string;
+interface HeroProps {
+  title: string
+  subtitle?: string
+  description?: string
 }
 
-export const HeroSection = ({
-  title,
-  subtitle,
-  description,
-}: HeroSectionProps) => {
-  const { theme } = useTheme();
+export function HeroSection({ title, subtitle, description }: HeroProps) {
+  const formattedDescription = description?.split("\n").map((line, i) => (
+    <p key={i} className="mt-2">
+      {line}
+    </p>
+  ))
 
   return (
-    <AnimatedBackground type="vivid" className="w-full min-h-screen">
-      <section className="container mx-auto py-32 md:py-40">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <div className="space-y-8 animate-fade-in text-left md:pr-8">
-            <h2 className="text-xl md:text-2xl font-semibold text-primary/90 animate-[fadeIn_1s_ease-out_0.2s_forwards] opacity-0">
+    <div className="relative min-h-[calc(100vh-6rem)] flex flex-col justify-center">
+      {/* Background gradients */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-slate-50 via-slate-100 to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950" />
+      <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+        <div
+          className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#9aca3c] to-[#699029] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+          style={{
+            clipPath:
+              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+          }}
+        />
+      </div>
+
+      <div className="container mx-auto px-4 md:px-6 flex flex-col lg:flex-row items-center gap-8 pt-20 pb-8">
+        <div className="flex-1 space-y-4">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-heading text-[#000005] dark:text-white">
+            {title}
+          </h1>
+          {subtitle && (
+            <h2 className="text-xl sm:text-2xl text-[#000005]/80 dark:text-white/80 font-sans">
               {subtitle}
             </h2>
-
-            <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight drop-shadow-sharp-black animate-[fadeIn_1s_ease-out_0.4s_forwards] opacity-0">
-              <h1>{title}</h1>
+          )}
+          {formattedDescription && (
+            <div className="text-base sm:text-lg text-[#000005]/60 dark:text-white/60 font-sans">
+              {formattedDescription}
             </div>
-
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed whitespace-pre-line animate-[fadeIn_1s_ease-out_0.6s_forwards] opacity-0">
-              {description}
-            </p>
-
-            <div className="flex gap-4 pt-4 animate-[fadeIn_1s_ease-out_0.8s_forwards] opacity-0">
-              <Badge variant="outline" className="text-sm px-4 py-2">
-                🎯 Higher Sales
-              </Badge>
-              <Badge variant="outline" className="text-sm px-4 py-2">
-                🔄 More Returns
-              </Badge>
-              <Badge variant="outline" className="text-sm px-4 py-2">
-                📈 Growing ROI
-              </Badge>
-            </div>
-          </div>
-
-          {/* Right Form */}
-          <div className="animate-[fadeIn_1s_ease-out_1s_forwards] opacity-0">
-            <MultiStepForm />
-          </div>
+          )}
         </div>
-      </section>
-    </AnimatedBackground>
-  );
-};
+        
+        <div className="flex-1 w-full">
+          <MultiStepForm />
+        </div>
+      </div>
+
+      <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
+        <div
+          className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#9aca3c] to-[#699029] opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+          style={{
+            clipPath:
+              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+          }}
+        />
+      </div>
+    </div>
+  )
+}

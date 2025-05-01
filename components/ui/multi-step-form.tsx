@@ -1,384 +1,355 @@
-"use client";
+"use client"
 
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import * as React from "react"
+import { motion } from "framer-motion"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { wholesaleFormSchema } from "@/lib/form-schema"
+import type { WholesaleFormData } from "@/lib/form-schema"
+import { FormInput } from "@/components/ui/form-input"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  WholesaleFormData,
-  wholesaleFormSchema,
-  interestOptions,
-} from "@/lib/form-schema";
+} from "@/components/ui/select"
+import { interestOptions } from "@/lib/form-schema"
 
-type Step = {
-  id: number;
-  title: string;
-  description: string;
-};
-
-const steps: Step[] = [
+const steps = [
   {
-    id: 1,
     title: "Contact Information",
-    description: "Fill in your basic contact details",
+    description: "Tell us about you",
   },
   {
-    id: 2,
-    title: "Business Address",
-    description: "Provide your business location",
+    title: "Business Details",
+    description: "Tell us about your business",
   },
   {
-    id: 3,
     title: "Business Interest",
-    description: "Tell us about your needs",
+    description: "Help us understand your needs",
   },
-];
+]
 
 export function MultiStepForm() {
-  const [currentStep, setCurrentStep] = React.useState<number>(1);
+  const [step, setStep] = React.useState(1)
+  const [formId, setFormId] = React.useState<string>("")
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
 
-  const form = useForm<WholesaleFormData>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    trigger,
+  } = useForm<WholesaleFormData>({
     resolver: zodResolver(wholesaleFormSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      mobileNumber: "",
-      email: "",
-      businessName: "",
-      businessTaxId: "",
-      address: {
-        street1: "",
-        street2: "",
-        city: "",
-        state: "",
-        postalCode: "",
-        country: "",
-      },
-      interest: undefined,
-    },
-  });
+    mode: "onBlur",
+  })
 
-  function onSubmit(data: WholesaleFormData) {
-    if (currentStep < steps.length) {
-      setCurrentStep((current) => current + 1);
-    } else {
-      console.log("Form submitted:", data);
-      // Handle form submission
+  const saveStep1 = async (data: WholesaleFormData) => {
+    try {
+      setIsSubmitting(true)
+      const response = await fetch("/api/wholesale", {
+        method: "POST",
+        body: JSON.stringify({
+          step: 1,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          mobileNumber: data.mobileNumber,
+          email: data.email,
+        }),
+      })
+      const result = await response.json()
+      if (result.id) {
+        setFormId(result.id)
+        setStep(2)
+      }
+    } catch (error) {
+      console.error("Error saving step 1:", error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
-  const StepIndicator = ({ step }: { step: Step }) => (
-    <div
-      className={`flex items-center ${
-        currentStep === step.id ? "text-primary" : "text-muted-foreground"
-      }`}
-    >
-      <div
-        className={`w-8 h-8 rounded-full border-2 flex items-center justify-center mr-2
-        ${
-          currentStep === step.id ? "border-primary" : "border-muted-foreground"
-        }`}
-      >
-        {step.id}
-      </div>
-      <div className="flex-1">
-        <h3 className="text-sm font-medium">{step.title}</h3>
-        <p className="text-xs">{step.description}</p>
-      </div>
-    </div>
-  );
+  const saveStep2 = async (data: WholesaleFormData) => {
+    try {
+      setIsSubmitting(true)
+      const response = await fetch("/api/wholesale", {
+        method: "POST",
+        body: JSON.stringify({
+          step: 2,
+          id: formId,
+          businessName: data.businessName,
+          businessTaxId: data.businessTaxId,
+          ...data.address,
+        }),
+      })
+      const result = await response.json()
+      if (result.success) {
+        setStep(3)
+      }
+    } catch (error) {
+      console.error("Error saving step 2:", error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const saveStep3 = async (data: WholesaleFormData) => {
+    try {
+      setIsSubmitting(true)
+      const response = await fetch("/api/wholesale", {
+        method: "POST",
+        body: JSON.stringify({
+          step: 3,
+          id: formId,
+          interest: data.interest,
+        }),
+      })
+      const result = await response.json()
+      if (result.success) {
+        setStep(4)
+      }
+    } catch (error) {
+      console.error("Error saving step 3:", error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const onSubmit = async (data: WholesaleFormData) => {
+    if (step === 1) {
+      const isValid = await trigger([
+        "firstName",
+        "lastName",
+        "mobileNumber",
+        "email",
+      ])
+      if (isValid) await saveStep1(data)
+    } else if (step === 2) {
+      const isValid = await trigger([
+        "businessName",
+        "address.street1",
+        "address.city",
+        "address.state",
+        "address.postalCode",
+        "address.country",
+      ])
+      if (isValid) await saveStep2(data)
+    } else if (step === 3) {
+      const isValid = await trigger(["interest"])
+      if (isValid) await saveStep3(data)
+    }
+  }
+
+  const handleInterestChange = (value: string) => {
+    setValue("interest", value as WholesaleFormData["interest"])
+  }
 
   return (
-    <div className="space-y-8 w-full max-w-2xl mx-auto">
-      {/* Progress Indicator */}
-      <div className="flex justify-between mb-8">
-        {steps.map((step, index) => (
-          <React.Fragment key={step.id}>
-            <StepIndicator step={step} />
-            {index < steps.length - 1 && (
-              <div className="flex-1 border-t-2 border-muted my-4 mx-4" />
-            )}
-          </React.Fragment>
+    <div className="max-w-2xl w-full mx-auto backdrop-blur-md bg-white/60 dark:bg-black/60 rounded-2xl p-4 md:p-8 space-y-6 md:space-y-8 shadow-lg">
+      {/* Progress Steps */}
+      <div className="flex justify-between mb-6 md:mb-8">
+        {steps.map((s, i) => (
+          <div key={s.title} className="flex flex-col items-center text-center">
+            <div
+              className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center ${
+                step > i + 1
+                  ? "bg-[#9aca3c] text-white"
+                  : step === i + 1
+                  ? "bg-[#9aca3c] text-white"
+                  : "bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+              }`}
+            >
+              {i + 1}
+            </div>
+            <div className="text-xs md:text-sm mt-2 hidden md:block">{s.title}</div>
+            <div className="text-[10px] md:text-xs text-[#000005]/60 dark:text-white/60 hidden md:block">
+              {s.description}
+            </div>
+          </div>
         ))}
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{steps[currentStep - 1].title}</CardTitle>
-          <CardDescription>
-            {steps[currentStep - 1].description}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              {currentStep === 1 && (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="firstName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>First Name *</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="lastName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Last Name *</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="mobileNumber"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Mobile Number *</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="tel" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email Address *</FormLabel>
-                          <FormControl>
-                            <Input {...field} type="email" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="businessName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Business Name *</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="businessTaxId"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Business Tax ID</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              )}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
+        {step === 1 && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-4"
+          >
+            <h2 className="text-xl md:text-2xl font-bold mb-4 font-['Built_Titling'] text-[#000005] dark:text-white">
+              Contact Information
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormInput
+                placeholder="First Name"
+                {...register("firstName")}
+                error={errors.firstName?.message}
+                label="First Name"
+              />
+              <FormInput
+                placeholder="Last Name"
+                {...register("lastName")}
+                error={errors.lastName?.message}
+                label="Last Name"
+              />
+            </div>
+            <FormInput
+              placeholder="Mobile Number"
+              {...register("mobileNumber")}
+              error={errors.mobileNumber?.message}
+              label="Mobile Number"
+            />
+            <FormInput
+              placeholder="Email"
+              type="email"
+              {...register("email")}
+              error={errors.email?.message}
+              label="Email"
+            />
+          </motion.div>
+        )}
 
-              {currentStep === 2 && (
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="address.street1"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Street Address *</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="address.street2"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Address Line 2</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="address.city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>City *</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="address.state"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>State *</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="address.postalCode"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Postal / Zip Code *</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="address.country"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Country *</FormLabel>
-                          <FormControl>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a country" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="US">
-                                  United States
-                                </SelectItem>
-                                <SelectItem value="CA">Canada</SelectItem>
-                                {/* Add more countries as needed */}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              )}
+        {step === 2 && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-4"
+          >
+            <h2 className="text-xl md:text-2xl font-bold mb-4 font-['Built_Titling'] text-[#000005] dark:text-white">
+              Business Details
+            </h2>
+            <FormInput
+              placeholder="Business Name"
+              {...register("businessName")}
+              error={errors.businessName?.message}
+              label="Business Name"
+            />
+            <FormInput
+              placeholder="Business Tax ID (Optional)"
+              {...register("businessTaxId")}
+              label="Business Tax ID"
+            />
+            <FormInput
+              placeholder="Street Address"
+              {...register("address.street1")}
+              error={errors.address?.street1?.message}
+              label="Street Address"
+            />
+            <FormInput
+              placeholder="Apt, Suite, etc. (optional)"
+              {...register("address.street2")}
+              label="Address Line 2"
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormInput
+                placeholder="City"
+                {...register("address.city")}
+                error={errors.address?.city?.message}
+                label="City"
+              />
+              <FormInput
+                placeholder="State"
+                {...register("address.state")}
+                error={errors.address?.state?.message}
+                label="State"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormInput
+                placeholder="Postal Code"
+                {...register("address.postalCode")}
+                error={errors.address?.postalCode?.message}
+                label="Postal Code"
+              />
+              <FormInput
+                placeholder="Country"
+                {...register("address.country")}
+                error={errors.address?.country?.message}
+                label="Country"
+              />
+            </div>
+          </motion.div>
+        )}
 
-              {currentStep === 3 && (
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="interest"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>What would you like to start? *</FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select your interest" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {interestOptions.map((option) => (
-                                <SelectItem
-                                  key={option.value}
-                                  value={option.value}
-                                >
-                                  {option.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              )}
+        {step === 3 && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-4"
+          >
+            <h2 className="text-xl md:text-2xl font-bold mb-4 font-['Built_Titling'] text-[#000005] dark:text-white">
+              Business Interest
+            </h2>
+            <Select onValueChange={handleInterestChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select your interest level" />
+              </SelectTrigger>
+              <SelectContent>
+                {interestOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.interest && (
+              <p className="text-red-500 text-sm">{errors.interest.message}</p>
+            )}
+          </motion.div>
+        )}
 
-              <div className="flex justify-between pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() =>
-                    setCurrentStep((current) => Math.max(1, current - 1))
-                  }
-                  disabled={currentStep === 1}
-                >
-                  Previous
-                </Button>
-                <Button type="submit">
-                  {currentStep === steps.length ? "Submit" : "Next"}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+        {step === 4 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center space-y-4 py-6 md:py-8"
+          >
+            <div className="text-[#9aca3c] text-5xl md:text-6xl mb-4">✓</div>
+            <h2 className="text-xl md:text-2xl font-bold font-['Built_Titling'] text-[#000005] dark:text-white">
+              Thank You!
+            </h2>
+            <p className="text-sm md:text-base text-[#000005]/80 dark:text-white/80 font-['Avenir_Next']">
+              Your wholesale inquiry has been submitted successfully. Our team will
+              review your application and contact you soon.
+            </p>
+          </motion.div>
+        )}
+
+        {step < 4 && (
+          <div className="flex justify-between pt-4 md:pt-6">
+            {step > 1 && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setStep((s) => s - 1)}
+                disabled={isSubmitting}
+                className="text-sm md:text-base"
+              >
+                Previous
+              </Button>
+            )}
+            <Button
+              type="submit"
+              className="bg-[#9aca3c] hover:bg-[#8bbb36] text-white ml-auto text-sm md:text-base"
+              disabled={isSubmitting}
+            >
+              {isSubmitting
+                ? "Saving..."
+                : step === 3
+                ? "Submit"
+                : "Save & Continue"}
+            </Button>
+          </div>
+        )}
+      </form>
     </div>
-  );
+  )
 }

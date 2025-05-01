@@ -1,4 +1,4 @@
-import * as z from "zod";
+import * as z from "zod"
 
 export const wholesaleFormSchema = z.object({
   // Step 1: Contact Information
@@ -6,12 +6,10 @@ export const wholesaleFormSchema = z.object({
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
   mobileNumber: z.string().min(10, "Please enter a valid phone number"),
   email: z.string().email("Please enter a valid email address"),
-  businessName: z
-    .string()
-    .min(2, "Business name must be at least 2 characters"),
-  businessTaxId: z.string().optional(),
 
-  // Step 2: Business Address
+  // Step 2: Business Details
+  businessName: z.string().min(2, "Business name must be at least 2 characters"),
+  businessTaxId: z.string().optional(),
   address: z.object({
     street1: z.string().min(1, "Street address is required"),
     street2: z.string().optional(),
@@ -36,9 +34,9 @@ export const wholesaleFormSchema = z.object({
       required_error: "Please select your interest level",
     }
   ),
-});
+})
 
-export type WholesaleFormData = z.infer<typeof wholesaleFormSchema>;
+export type WholesaleFormData = z.infer<typeof wholesaleFormSchema>
 
 export const interestOptions = [
   {
@@ -71,4 +69,4 @@ export const interestOptions = [
     value: "CHAIN_BULK",
     label: "I buy for a chain of stores and would like bulk pricing options",
   },
-];
+]

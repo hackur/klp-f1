@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model WholesaleForm {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  step      Int      @default(1)
+  completed Boolean  @default(false)
+
+  // Step 1: Contact Information
+  firstName     String?
+  lastName      String?
+  mobileNumber  String?
+  email         String?
+  businessName  String?
+  businessTaxId String?
+
+  // Step 2: Business Address
+  street1    String?
+  street2    String?
+  city       String?
+  state      String?
+  postalCode String?
+  country    String?
+
+  // Step 3: Business Interest
+  interest String?
+
+  @@map("wholesale_forms")
+}
