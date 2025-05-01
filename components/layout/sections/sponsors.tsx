@@ -41,8 +41,8 @@ export const SponsorsSection = () => {
         {/* Infinite Scrolling Logo Row */}
         <div className="relative">
           {/* Gradient Overlays */}
-          <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-background to-transparent z-10" />
-          <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-background to-transparent z-10" />
+          <div className="absolute left-0 top-0 w-[8%] h-full bg-gradient-to-r from-background to-transparent z-10" />
+          <div className="absolute right-0 top-0 w-[8%] h-full bg-gradient-to-l from-background to-transparent z-10" />
 
           {/* Scrolling Container */}
           <div className="flex gap-16 animate-[scroll_20s_linear_infinite] hover:pause">
