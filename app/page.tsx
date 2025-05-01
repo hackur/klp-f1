@@ -13,6 +13,7 @@ import { FundingSection } from "@/components/layout/sections/funding";
 import { FinalCTASection } from "@/components/layout/sections/final-cta";
 import { FadeIn } from "@/components/ui/fade-in";
 import { SponsorsSection } from "@/components/layout/sections/sponsors";
+import ProductShowcase from "@/components/ui/product-showcase";
 
 export const metadata = {
   metadataBase: new URL("https://mykasher.com"),
@@ -31,6 +32,10 @@ export default function Home() {
       />
 
       <SponsorsSection />
+
+      <FadeIn>
+        <ProductShowcase />
+      </FadeIn>
 
       <FadeIn delay={300}>
         <ProblemHookSection content={content.hero.description} />
