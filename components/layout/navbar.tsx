@@ -76,20 +76,21 @@ export const Navbar = () => {
     <header className="container top-5 mx-auto sticky border border-border z-40 rounded-2xl flex justify-between items-center p-2 bg-card/50 backdrop-blur-[2px]">
       <Link href="/" className="font-bold text-lg flex items-center">
         <Image
-          src="/hero-image-light.jpeg"
-          width={32}
-          height={32}
-          alt="Kasher Logo"
-          className="mr-2 dark:hidden rounded-md"
+          src="/logos/kasher-logo-wide-green.png"
+          width={120}
+          height={40}
+          alt="Kasher"
+          className="dark:hidden"
+          priority
         />
         <Image
-          src="/hero-image-dark.jpeg"
-          width={32}
-          height={32}
-          alt="Kasher Logo"
-          className="mr-2 hidden dark:block rounded-md"
+          src="/logos/kasher-logo-wide-green.png"
+          width={120}
+          height={40}
+          alt="Kasher"
+          className="hidden dark:block"
+          priority
         />
-        Kasher
       </Link>
       {/* <!-- Mobile --> */}
       <div className="flex items-center lg:hidden">
@@ -110,20 +111,21 @@ export const Navbar = () => {
                 <SheetTitle className="flex items-center">
                   <Link href="/" className="flex items-center">
                     <Image
-                      src="/hero-image-light.jpeg"
-                      width={32}
-                      height={32}
-                      alt="Kasher Logo"
-                      className="mr-2 dark:hidden rounded-md"
+                      src="/logos/kasher-logo-wide-green.png"
+                      width={100}
+                      height={35}
+                      alt="Kasher"
+                      className="dark:hidden"
+                      priority
                     />
                     <Image
-                      src="/hero-image-dark.jpeg"
-                      width={32}
-                      height={32}
-                      alt="Kasher Logo"
-                      className="mr-2 hidden dark:block rounded-md"
+                      src="/logos/kasher-logo-wide-green.png"
+                      width={100}
+                      height={35}
+                      alt="Kasher"
+                      className="hidden dark:block"
+                      priority
                     />
-                    Kasher
                   </Link>
                 </SheetTitle>
               </SheetHeader>
